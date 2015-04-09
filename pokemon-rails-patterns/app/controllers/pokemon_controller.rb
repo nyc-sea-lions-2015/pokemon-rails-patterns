@@ -37,9 +37,9 @@ class PokemonController < ApplicationController
 
   def redirect_with_type
     if params[:type].present?
-      redirect_to "/?type=#{params[:type]}"
+      redirect_to pokemon_type_path
     else
-      redirect_to '/'
+      redirect_to pokemon_index_path
     end
   end
 

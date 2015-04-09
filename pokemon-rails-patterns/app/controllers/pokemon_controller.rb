@@ -7,9 +7,9 @@ class PokemonController < ApplicationController
   end
 
   def catch
-    found_pokemon = Pokemon.find_by(id: params[:id])
+    found_pokemon = Pokemon.find(params[:id])
 
-    if found_pokemon.capt
+    if found_pokemon.capture
       NotificationService.tell_friends "I caught #{found_pokemon.name.upcase}!"
     else
       flash[:notice] = "damn Damn DAMN! #{found_pokemon.name.upcase} got away!"

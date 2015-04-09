@@ -22,7 +22,7 @@ class Pokemon < ActiveRecord::Base
     end
   end
 
-  def capt
+  def capture
     self.caught = true
     save
   end

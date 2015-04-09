@@ -7,22 +7,19 @@ class PokemonController < ApplicationController
   end
 
   def catch
-    target_pokemon = Pokemon.find(id: params[:id])
+    found_pokemon = Pokemon.find_by(id: params[:id])
 
-    if target_pokemon.capt
+    if found_pokemon.capt
       NotificationService.tell_friends "I caught #{found_pokemon.name.upcase}!"
     else
       flash[:notice] = "damn Damn DAMN! #{found_pokemon.name.upcase} got away!"
     end
-
     redirect_with_type
-
   end
 
   def release
     found_pokemon = Pokemon.where(id: params[:id]).first
     found_pokemon.release
-
     release_message = "#{found_pokemon.name} was released back into the wild"
     flash[:notice] = release_message
     NotificationService.tell_friends release_message

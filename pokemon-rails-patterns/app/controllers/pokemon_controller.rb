@@ -4,7 +4,6 @@ class PokemonController < ApplicationController
     #Searching
     @captured_pokemon = Pokemon.caught.by_type(params[:type]).order(:type, :id)
     @free_pokemon = Pokemon.free.by_type(params[:type]).order(:type, :id)
-    @types = Pokemon::TYPES
 
     @types = %w(
     bug dark dragon electric fairy fighting fire flying

@@ -10,11 +10,11 @@
   <div id='filters'>
     <ul>
       <li>
-        <a href='/' class='pokemon-type' >all</a>
+        <%= link_to 'all', pokemon_index_path %>
       </li>
       <% @types.each do |type| %>
         <li>
-          <a href='/?type=<%= type %>' class='<%= type %> pokemon-type' ><%= type %></a>
+          <%= link_to type, pokemon_type_path(type), class: "#{type} pokemon-type"  %>
         </li>
       <% end %>
     </ul>

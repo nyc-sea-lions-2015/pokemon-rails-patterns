@@ -7,7 +7,10 @@ class Pokemon < ActiveRecord::Base
     shadow steel unknown water
     )
 
-  
+  validates_inclusion_of :type, in: TYPES
+
+  validate :fewer_than_two_caught
+
   scope :free, -> { where(caught: false) }
   scope :caught, -> { where(caught: true) }
 
@@ -19,5 +22,22 @@ class Pokemon < ActiveRecord::Base
     end
   end
 
+  def capt
+    self.caught = true
+    save
+  end
+
+  def release
+    self.caught = false
+    save
+  end
+
+  private 
+
+  def fewer_than_two_caught
+    if caught && Pokemon.caught.by_type(type).count >= 2
+      errors.add(:caught, "too many caught")
+    end
+  end
 
 end

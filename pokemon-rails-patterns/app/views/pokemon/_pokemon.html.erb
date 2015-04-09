@@ -7,8 +7,8 @@
   <img src='http://img.pokemondb.net/artwork/<%=pokemon.name.downcase%>.jpg'
        onerror="this.onerror=null;this.src='/images/new_pokemon.png'" />
   <p class='<%=pokemon.type%> pokemon-type'> <%=pokemon.type%> </p>
-  <form method='post' action="/release/<%=pokemon.id%>">
+  <form method='post' action="<%= form_action(pokemon) %>">
     <input type='hidden' name='type' value='<%=params[:type]%>'></input>
-    <input type='submit' value='Release!'></input>
+    <input type='submit' value="<%= action_word(pokemon)  %>"></input>
   </form>
 </div>

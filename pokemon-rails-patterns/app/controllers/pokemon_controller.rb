@@ -1,23 +1,15 @@
 class PokemonController < ApplicationController
 
   def index
-    #Searching
-
     @captured_pokemon = Pokemon.caught.by_type(params[:type]).order(:type, :id)
     @free_pokemon = Pokemon.free.by_type(params[:type]).order(:type, :id)
     @types = Pokemon::TYPES
-
   end
 
   def catch
-    @types = Pokemon::TYPES
+    target_pokemon = Pokemon.find(id: params[:id])
 
-    #Validations: Allowed to catch pokemon that follow the following rules:
-    # you don't already have it
-    # you don't already have 2 pokemon of that type
-    found_pokemon = Pokemon.where(id: params[:id]).first
-
-    if found_pokemon.capt
+    if target_pokemon.capt
       NotificationService.tell_friends "I caught #{found_pokemon.name.upcase}!"
     else
       flash[:notice] = "damn Damn DAMN! #{found_pokemon.name.upcase} got away!"

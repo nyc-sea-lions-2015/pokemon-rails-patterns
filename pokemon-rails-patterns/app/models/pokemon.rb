@@ -12,6 +12,16 @@ class Pokemon < ActiveRecord::Base
     end
   end
 
+  def catch
+    self.caught = true
+    save
+  end
+
+  def release
+    self.caught = false
+    save
+  end
+
   TYPES = %w(
     bug dark dragon electric fairy fighting fire flying
     ghost grass ground ice normal poison psychic rock

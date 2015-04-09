@@ -18,8 +18,7 @@ class PokemonController < ApplicationController
     caught_count = Pokemon.where(type: found_pokemon.type, caught: true).count
 
     if caught_count < 2 && @types.include?( found_pokemon.type )
-      found_pokemon.caught = true
-      found_pokemon.save
+      found_pokemon.catch
       NotificationService.tell_friends "I caught #{found_pokemon.name.upcase}!"
     else
       flash[:notice] = "damn Damn DAMN! #{found_pokemon.name.upcase} got away!"
@@ -31,8 +30,7 @@ class PokemonController < ApplicationController
 
   def release
     found_pokemon = Pokemon.where(id: params[:id]).first
-    found_pokemon.caught = false
-    found_pokemon.save
+    found_pokemon.release
 
     release_message = "#{found_pokemon.name} was released back into the wild"
     flash[:notice] = release_message

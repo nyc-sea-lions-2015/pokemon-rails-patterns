@@ -2,39 +2,17 @@ class PokemonController < ApplicationController
 
   def index
     #Searching
-    @captured_pokemon = Pokemon.where(caught: true).order(:type)
-    @free_pokemon = Pokemon.where(caught: false).order(:type)
+    @captured_pokemon = Pokemon.caught.by_type(params[:type]).order(:type, :id)
+    @free_pokemon = Pokemon.free.by_type(params[:type]).order(:type, :id)
 
-    if params[:type]
-      @captured_pokemon = @captured_pokemon.where(type: params[:type])
-      @free_pokemon = @free_pokemon.where(type: params[:type])
-    end
-
-    @captured_pokemon = @captured_pokemon.order(:type, :id)
-    @free_pokemon = @free_pokemon.order(:type, :id)
-
-    @types = %w(
-    bug dark dragon electric fairy fighting fire flying
-    ghost grass ground ice normal poison psychic rock
-    shadow steel unknown water
-    )
+    @types = Pokemon::TYPES
   end
 
   def catch
-    @types = %w(
-    bug dark dragon electric fairy fighting fire flying
-    ghost grass ground ice normal poison psychic rock
-    shadow steel unknown water
-    )
-    #Validations: Allowed to catch pokemon that follow the following rules:
-    # you don't already have it
-    # you don't already have 2 pokemon of that type
-    found_pokemon = Pokemon.where(id: params[:id]).first
+    found_pokemon = Pokemon.find(params[:id])
     caught_count = Pokemon.where(type: found_pokemon.type, caught: true).count
 
-    if caught_count < 2 && @types.include?( found_pokemon.type )
-      found_pokemon.caught = true
-      found_pokemon.save
+    if found_pokemon.catch
       NotificationService.tell_friends "I caught #{found_pokemon.name.upcase}!"
     else
       flash[:notice] = "damn Damn DAMN! #{found_pokemon.name.upcase} got away!"
@@ -46,8 +24,7 @@ class PokemonController < ApplicationController
 
   def release
     found_pokemon = Pokemon.where(id: params[:id]).first
-    found_pokemon.caught = false
-    found_pokemon.save
+    found_pokemon.release
 
     release_message = "#{found_pokemon.name} was released back into the wild"
     flash[:notice] = release_message
@@ -60,9 +37,10 @@ class PokemonController < ApplicationController
 
   def redirect_with_type
     if params[:type].present?
-      redirect_to "/?type=#{params[:type]}"
+      redirect_to pokemon_type_path
     else
-      redirect_to '/'
+      redirect_to pokemon_index_path
     end
   end
+
 end

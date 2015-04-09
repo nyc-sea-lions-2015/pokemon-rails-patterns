@@ -3,22 +3,15 @@ class PokemonController < ApplicationController
   def index
     #Searching
 
-    @captured_pokemon = Pokemon.caught.by_type(param[:type]).order(:type, :id)
-    @free_pokemon = Pokemon.free.by_type(param[:type]).order(:type, :id)
+    @captured_pokemon = Pokemon.caught.by_type(params[:type]).order(:type, :id)
+    @free_pokemon = Pokemon.free.by_type(params[:type]).order(:type, :id)
+    @types = Pokemon::TYPES
 
-    @types = %w(
-    bug dark dragon electric fairy fighting fire flying
-    ghost grass ground ice normal poison psychic rock
-    shadow steel unknown water
-    )
   end
 
   def catch
-    @types = %w(
-    bug dark dragon electric fairy fighting fire flying
-    ghost grass ground ice normal poison psychic rock
-    shadow steel unknown water
-    )
+    @types = Pokemon::TYPES
+
     #Validations: Allowed to catch pokemon that follow the following rules:
     # you don't already have it
     # you don't already have 2 pokemon of that type

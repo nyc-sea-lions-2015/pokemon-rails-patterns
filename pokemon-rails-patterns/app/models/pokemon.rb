@@ -12,5 +12,10 @@ class Pokemon < ActiveRecord::Base
     end
   end
 
+  TYPES = %w(
+    bug dark dragon electric fairy fighting fire flying
+    ghost grass ground ice normal poison psychic rock
+    shadow steel unknown water
+    )
 
 end
